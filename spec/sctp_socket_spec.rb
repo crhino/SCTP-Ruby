@@ -1,4 +1,4 @@
-require 'socket'
+require 'ipaddr'
 require 'sctp'
 
 describe SCTP::Socket do
@@ -10,12 +10,16 @@ describe SCTP::Socket do
 
     it 'returns an object with the superclass of IPSocket' do
       obj = SCTP::Socket.new(Socket::PF_INET, Socket::SOCK_STREAM)
-      p obj.inspect
       expect(obj).to be_a_kind_of(IPSocket)
     end
  
     it 'can be instantiated with the SOCK_SEQPACKET flag' do
-      obj = SCTP::Socket.new(Socket::PF_INET, Socket::SOCK_SEQPACKET)
+      obj = nil
+      expect {
+        obj = SCTP::Socket.new(Socket::PF_INET, Socket::SOCK_SEQPACKET)
+      }.not_to raise_error
+
+      expect(obj).to be_instance_of(SCTP::Socket)
       expect(obj).to be_a_kind_of(IPSocket)
     end
 

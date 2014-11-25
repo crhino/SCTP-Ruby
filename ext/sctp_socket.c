@@ -43,8 +43,6 @@ static VALUE sctp_socket_initialize(int argc, VALUE *argv, VALUE self) {
   VALUE domain, type;
   sctp_args arg;
 
-  fprintf(stderr, "number of args is: %d\n\n", argc);
-
   rb_scan_args(argc, argv, "2", &domain, &type);
 
   arg.sock = self;
@@ -55,8 +53,11 @@ static VALUE sctp_socket_initialize(int argc, VALUE *argv, VALUE self) {
 }
 
 void Init_sctp_socket() {
-  VALUE rb_cIPSocket = rb_const_get(rb_cObject, rb_intern("IPSocket"));
-  VALUE cSCTPSocket = rb_define_class_under(mSCTP, "Socket", rb_cIPSocket);
+  VALUE rb_cIPSocket, cSCTPSocket;
+
+  rb_require("socket");
+  rb_cIPSocket = rb_const_get(rb_cObject, rb_intern("IPSocket"));
+  cSCTPSocket = rb_define_class_under(mSCTP, "Socket", rb_cIPSocket);
 
   rb_define_alloc_func(cSCTPSocket, sctp_socket_allocate);
   rb_define_method(cSCTPSocket, "initialize", sctp_socket_initialize, -1);
